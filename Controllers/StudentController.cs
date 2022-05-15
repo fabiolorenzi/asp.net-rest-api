@@ -48,5 +48,21 @@ namespace RestAPI.Controllers
 
             return CreatedAtAction(nameof(GetById), new { id = student.Id }, student);
         }
+
+        [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> Update(int id, Student student)
+        {
+            if (id != student.Id)
+            {
+                return BadRequest();
+            }
+
+            _context.Entry(student).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
+            return Ok(student);
+        }
     }
 }
