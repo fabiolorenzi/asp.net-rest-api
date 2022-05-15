@@ -64,5 +64,22 @@ namespace RestAPI.Controllers
 
             return Ok(student);
         }
+
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var studentToDelete = await _context.Students.FindAsync(id);
+            if (studentToDelete == null)
+            {
+                return NotFound();
+            }
+
+            _context.Students.Remove(studentToDelete);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
     }
 }
